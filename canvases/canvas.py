@@ -11,7 +11,7 @@ class Canvas:
         if not is_number(width):
             raise InvalidParameter('Width must be a number')
         self._x = width
-        
+
         if not is_number(height):
             raise InvalidParameter('Height must be a number')
         self._y = height
@@ -22,7 +22,7 @@ class Canvas:
             raise InvalidParameter('Framerate must be a number')
         self.framerate = framerate
 
-    def toDict(self):
+    def toDictionary(self):
         return {
             'classname': type(self).__name__,
             'x': self._x,
@@ -31,8 +31,8 @@ class Canvas:
             'scribes': [scribe.toDict() for scribe in self.scribes]
         }
 
-    def fromDict(data, g):
-        canvas = g[data.get('classname')](data.get('x'), data.get('y'), scribes=[g[scribe.get('classname')].fromDict(scribe, g) for scribe in data.get('scribes')])
+    def fromDictionary(data, g):
+        canvas = g[data.get('classname')](data.get('x'), data.get('y'), scribes=[g[scribe.get('classname')].fromDictionary(scribe, g) for scribe in data.get('scribes')])
         canvas._canvas = data.get('canvas')
         return canvas
 
@@ -56,10 +56,10 @@ class Canvas:
     def hitsWall(self, point):
         return self.hitsVerticalWall(point) or self.hitsHorizontalWall(point)
 
-    def getReflection(self, point):
+    def bounceOfftheWall(self, point):
         return [-1 if self.hitsVerticalWall(point) else 1, -1 if self.hitsHorizontalWall(point) else 1]
 
-    def setPos(self, pos, mark):
+    def setPosition(self, pos, mark):
         try:
             self._canvas[round(pos[0])][round(pos[1])] = mark
         except Exception as e:
